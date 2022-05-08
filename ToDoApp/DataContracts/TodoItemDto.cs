@@ -1,20 +1,19 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ToDoApp.DataContracts
 {
-    [DataContract(Name ="TodoItem")]
     public class TodoItemDto
     {
-        [DataMember(IsRequired = true)]
-        int Id { get; set; }
+        public int Id { get; set; }
 
-        [DataMember(IsRequired = true)]
-        string? Title { get; set; }
-        [DataMember]
-        string? Description { get; set; }
-        [DataMember(IsRequired = true)]
-        bool IsCompleted { get; set; }
-        [DataMember]
-        DateTime CreatedDate { get; set; }
+        [Required]
+        public string? Title { get; set; }
+
+        public string? Description { get; set; }
+
+        [Required]
+        public bool IsCompleted { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

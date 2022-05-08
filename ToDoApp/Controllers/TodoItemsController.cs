@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using ToDoApp.DataContracts;
+using ToDoApp.Models;
+using ToDoApp.Services.Abstractions;
 
 namespace ToDoApp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiVersion("1.0")]
     [Produces("application/json")]
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
         private readonly ILogger<TodoItemsController> _logger;
+        private readonly ITodoItemService _todoService;
+        private readonly IMapper _mapper;
 
-        public TodoItemsController(ILogger<TodoItemsController> logger)
+        public TodoItemsController(ITodoItemService todoService, IMapper mapper, ILogger<TodoItemsController> logger)
         {
+            _todoService = todoService;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -24,9 +31,19 @@ namespace ToDoApp.Controllers
         [HttpGet]
         [Route("api/[controller]")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<TodoItemDto>)))]
-        public IEnumerable<TodoItemDto> GetAll()
+        public async Task<ActionResult<IEnumerable<TodoItemDto>>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var todos = await _todoService.GetAll();
+                var todoDtos = _mapper.Map<IEnumerable<TodoItem>, IEnumerable<TodoItemDto>>(todos);
+                return Ok(todoDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(GetAll)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -36,11 +53,13 @@ namespace ToDoApp.Controllers
         /// <response code="200">List of completed Todo items found.</response>
         [HttpGet]
         [ActionName("complete")]
-        [Route("api/[controller]/[action]")]
+        [Route("api/[controller]/[action]/{isCompleted}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<TodoItemDto>)))]
-        public IEnumerable<TodoItemDto> GetAllCompleted()
+        public async Task<ActionResult<IEnumerable<TodoItemDto>>> GetByCompletion(bool isCompleted)
         {
-            throw new NotImplementedException();
+            var filteredTodos = await _todoService.GetByCompletion(isCompleted);
+            var filteredTodoDtos = _mapper.Map<IEnumerable<TodoItem>, IEnumerable<TodoItemDto>>(filteredTodos);
+            return Ok(filteredTodoDtos);
         }
 
 
@@ -55,9 +74,23 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TodoItemDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public TodoItemDto Get(int id)
+        public async Task<ActionResult<TodoItemDto>> Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var todo = await _todoService.GetById(id);
+                var todoDto = _mapper.Map<TodoItemDto>(todo);
+                return Ok(todoDto);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Todo item not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(Get)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -68,13 +101,10 @@ namespace ToDoApp.Controllers
         [HttpPost]
         [Route("api/[controller]")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TodoItemDto))]
-        public TodoItemDto Create([FromBody] TodoItemDto todoDto)
+        public async Task<ActionResult<TodoItemDto>> Create([FromBody] TodoItemDto todoDto)
         {
-            // https://stackoverflow.com/questions/1860645/create-request-with-post-which-response-codes-200-or-201-and-content
-            // https://stackoverflow.com/questions/19199872/best-practice-for-restful-post-response
-            // Returning the new object fits with the REST principle of "Uniform Interface - Manipulation of resources through representations."
-            // The complete object is the representation of the new state of the object that was created.
-            throw new NotImplementedException();
+            var createdTodo = await _todoService.Add(_mapper.Map<TodoItem>(todoDto));
+            return CreatedAtAction(nameof(Create), new {id = createdTodo.Id}, _mapper.Map<TodoItemDto>(createdTodo));
         }
 
         /// <summary>
@@ -88,9 +118,22 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public void Update(int id, [FromBody] TodoItemDto todoDto)
+        public async Task<ActionResult> Update(int id, [FromBody] TodoItemDto todoDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var updatedTodo = await _todoService.Update(id, _mapper.Map<TodoItem>(todoDto));
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Todo item not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(Update)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -103,7 +146,7 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -116,7 +159,7 @@ namespace ToDoApp.Controllers
         [HttpDelete]
         [Route("api/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public void DeleteAll()
+        public async Task<ActionResult> DeleteAll()
         {
             throw new NotImplementedException();
         }
@@ -132,7 +175,7 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/{id}/complete")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public void Complete(int id)
+        public async Task<ActionResult> Complete(int id)
         {
             throw new NotImplementedException();
         }
@@ -148,7 +191,7 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/complete")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public void CompleteAll()
+        public async Task<ActionResult> CompleteAll()
         {
             throw new NotImplementedException();
         }

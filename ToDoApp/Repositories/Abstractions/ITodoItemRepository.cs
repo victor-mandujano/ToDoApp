@@ -8,7 +8,7 @@ namespace ToDoApp.Repositories.Abstractions
         Task<TodoItem> GetById(int id);
         Task DeleteById(int id);
         Task DeleteAll();
-        Task Add(TodoItem todoItem);
+        Task<TodoItem> Add(TodoItem todoItem);
         Task<TodoItem> Update(int id, TodoItem todoItem);
 
     }
