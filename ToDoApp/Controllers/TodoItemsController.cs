@@ -113,7 +113,7 @@ namespace ToDoApp.Controllers
             try
             {
                 var createdTodo = await _todoService.Add(_mapper.Map<TodoItem>(todoDto));
-                return CreatedAtAction(nameof(Create), new { id = createdTodo.Id }, _mapper.Map<TodoItemDto>(createdTodo));
+                return CreatedAtAction(nameof(Get), new { id = createdTodo.Id }, _mapper.Map<TodoItemDto>(createdTodo));
             }
             catch (Exception ex)
             {
