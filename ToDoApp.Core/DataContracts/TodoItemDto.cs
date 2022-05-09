@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ToDoApp.DataContracts
+namespace ToDoApp.Core.DataContracts
 {
     public class TodoItemDto
     {

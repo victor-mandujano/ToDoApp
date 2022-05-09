@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using ToDoApp.DataContracts;
-using ToDoApp.Models;
+using ToDoApp.Core.DataContracts;
+using ToDoApp.Core.Models;
 
 namespace ToDoApp.Profiles
 {

@@ -1,7 +1,7 @@
-﻿using ToDoApp.Repositories;
-using ToDoApp.Repositories.Abstractions;
-using ToDoApp.Services;
-using ToDoApp.Services.Abstractions;
+﻿using ToDoApp.Core.Repositories;
+using ToDoApp.Core.Repositories.Abstractions;
+using ToDoApp.Core.Services;
+using ToDoApp.Core.Services.Abstractions;
 
 namespace ToDoApp.Extensions
 {

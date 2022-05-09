@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using ToDoApp.Models;
-using ToDoApp.Repositories.Abstractions;
+﻿using System.Collections.Concurrent;
+using ToDoApp.Core.Models;
+using ToDoApp.Core.Repositories.Abstractions;
 
-namespace ToDoApp.Repositories
+namespace ToDoApp.Core.Repositories
 {
     public class TodoItemInMemoryRepository : ITodoItemRepository
     {

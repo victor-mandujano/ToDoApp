@@ -1,6 +1,6 @@
-﻿using ToDoApp.Models;
+﻿using ToDoApp.Core.Models;
 
-namespace ToDoApp.Services.Abstractions
+namespace ToDoApp.Core.Services.Abstractions
 {
     /// <summary>
     /// Service to manage <see cref="TodoItem">TodoItem</see> instances.

@@ -1,8 +1,8 @@
-﻿using ToDoApp.Models;
-using ToDoApp.Repositories.Abstractions;
-using ToDoApp.Services.Abstractions;
+﻿using ToDoApp.Core.Models;
+using ToDoApp.Core.Repositories.Abstractions;
+using ToDoApp.Core.Services.Abstractions;
 
-namespace ToDoApp.Services
+namespace ToDoApp.Core.Services
 {
     public class TodoItemService : ITodoItemService
     {

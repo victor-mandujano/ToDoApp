@@ -1,6 +1,6 @@
-﻿using ToDoApp.Models;
+﻿using ToDoApp.Core.Models;
 
-namespace ToDoApp.Repositories.Abstractions
+namespace ToDoApp.Core.Repositories.Abstractions
 {
     /// <summary>
     /// Repository to manage <see cref="TodoItem">TodoItem</see> instances./>

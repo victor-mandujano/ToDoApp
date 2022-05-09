@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Models
+﻿namespace ToDoApp.Core.Models
 {
     public class TodoItem
     {

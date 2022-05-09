@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using ToDoApp.DataContracts;
-using ToDoApp.Models;
-using ToDoApp.Services.Abstractions;
+using ToDoApp.Core.DataContracts;
+using ToDoApp.Core.Models;
+using ToDoApp.Core.Services.Abstractions;
 
 namespace ToDoApp.Controllers
 {
