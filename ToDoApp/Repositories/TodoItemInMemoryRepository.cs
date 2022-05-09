@@ -20,12 +20,14 @@ namespace ToDoApp.Repositories
 
         public Task DeleteAll()
         {
-            throw new NotImplementedException();
+            _todosMap.Clear();
+            return Task.CompletedTask;
         }
 
         public Task DeleteById(int id)
         {
-            throw new NotImplementedException();
+            _todosMap.Remove(id, out _);
+            return Task.CompletedTask;
         }
 
         public Task<IEnumerable<TodoItem>> GetAll()
@@ -38,10 +40,19 @@ namespace ToDoApp.Repositories
             return Task.FromResult(_todosMap[id]);
         }
 
-        public Task<TodoItem> Update(int id, TodoItem todoItem)
+        public Task<TodoItem> Update(TodoItem todoItem)
         {
-            _todosMap[id] = todoItem;
+            _todosMap[todoItem.Id] = todoItem;
             return Task.FromResult(todoItem);
+        }
+
+        public Task<IEnumerable<TodoItem>> UpdateRange(IEnumerable<TodoItem> todoItems)
+        {
+            foreach (var todoItem in todoItems)
+            {
+                _todosMap[todoItem.Id] = todoItem;
+            }
+            return Task.FromResult(todoItems);
         }
 
         private static int GenerateId()

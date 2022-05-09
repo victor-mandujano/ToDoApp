@@ -17,24 +17,40 @@ namespace ToDoApp.Services
             return _todoRepository.Add(todoItem);
         }
 
-        public Task Complete(int id)
+        public async Task<TodoItem> UpdateCompletionById(int id, bool isCompleted)
         {
-            throw new NotImplementedException();
+            var todo = await _todoRepository.GetById(id).ConfigureAwait(false);
+            if (todo == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            todo.IsCompleted = isCompleted;
+            return await _todoRepository.Update(todo).ConfigureAwait(false);
         }
 
-        public Task CompleteAll()
+        public async Task<IEnumerable<TodoItem>> UpdateCompletionAll(bool isCompleted)
         {
-            throw new NotImplementedException();
+            var todos = await _todoRepository.GetAll().ConfigureAwait(false);
+            foreach (var todo in todos)
+            {
+                todo.IsCompleted = isCompleted;
+            }
+            return await _todoRepository.UpdateRange(todos).ConfigureAwait(false);
         }
 
         public Task DeleteAll()
         {
-            throw new NotImplementedException();
+            return _todoRepository.DeleteAll();
         }
 
-        public Task DeleteById(int id)
+        public async Task DeleteById(int id)
         {
-            throw new NotImplementedException();
+            var todo = await _todoRepository.GetById(id).ConfigureAwait(false);
+            if (todo == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            await _todoRepository.DeleteById(todo.Id).ConfigureAwait(false);
         }
 
         public Task<IEnumerable<TodoItem>> GetAll()
@@ -67,7 +83,7 @@ namespace ToDoApp.Services
             }
             todoItem.Id = existingTodo.Id;
             todoItem.CreatedDate = existingTodo.CreatedDate;
-            var updatedTodo = await _todoRepository.Update(id, todoItem);
+            var updatedTodo = await _todoRepository.Update(todoItem).ConfigureAwait(false);
             return updatedTodo;
         }
     }

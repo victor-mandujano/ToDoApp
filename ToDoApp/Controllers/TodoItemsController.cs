@@ -57,9 +57,17 @@ namespace ToDoApp.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<TodoItemDto>)))]
         public async Task<ActionResult<IEnumerable<TodoItemDto>>> GetByCompletion(bool isCompleted)
         {
-            var filteredTodos = await _todoService.GetByCompletion(isCompleted);
-            var filteredTodoDtos = _mapper.Map<IEnumerable<TodoItem>, IEnumerable<TodoItemDto>>(filteredTodos);
-            return Ok(filteredTodoDtos);
+            try
+            {
+                var filteredTodos = await _todoService.GetByCompletion(isCompleted);
+                var filteredTodoDtos = _mapper.Map<IEnumerable<TodoItem>, IEnumerable<TodoItemDto>>(filteredTodos);
+                return Ok(filteredTodoDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(GetByCompletion)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
 
@@ -103,8 +111,16 @@ namespace ToDoApp.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TodoItemDto))]
         public async Task<ActionResult<TodoItemDto>> Create([FromBody] TodoItemDto todoDto)
         {
-            var createdTodo = await _todoService.Add(_mapper.Map<TodoItem>(todoDto));
-            return CreatedAtAction(nameof(Create), new {id = createdTodo.Id}, _mapper.Map<TodoItemDto>(createdTodo));
+            try
+            {
+                var createdTodo = await _todoService.Add(_mapper.Map<TodoItem>(todoDto));
+                return CreatedAtAction(nameof(Create), new { id = createdTodo.Id }, _mapper.Map<TodoItemDto>(createdTodo));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(Create)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -122,7 +138,7 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                var updatedTodo = await _todoService.Update(id, _mapper.Map<TodoItem>(todoDto));
+                await _todoService.Update(id, _mapper.Map<TodoItem>(todoDto));
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -148,7 +164,20 @@ namespace ToDoApp.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _todoService.DeleteById(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Todo item not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(Delete)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -161,7 +190,16 @@ namespace ToDoApp.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeleteAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _todoService.DeleteAll();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(DeleteAll)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -175,9 +213,22 @@ namespace ToDoApp.Controllers
         [Route("api/[controller]/{id}/complete")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Complete(int id)
+        public async Task<ActionResult> UpdateCompletion(int id, bool isCompleted)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _todoService.UpdateCompletionById(id, isCompleted);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Todo item not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(UpdateCompletion)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -185,15 +236,22 @@ namespace ToDoApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="204">Todo items successfully updated.</response>
-        /// <response code="404">No todo item not found.</response>
         [HttpPatch]
         [ActionName("complete")]
         [Route("api/[controller]/complete")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> CompleteAll()
+        public async Task<ActionResult> UpdateCompletionAll(bool isCompleted)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _todoService.UpdateCompletionAll(isCompleted);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while executing {nameof(UpdateCompletionAll)}.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
