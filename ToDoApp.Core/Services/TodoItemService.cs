@@ -58,9 +58,9 @@ namespace ToDoApp.Core.Services
             return _todoRepository.GetAll();
         }
 
-        public Task<TodoItem> GetById(int id)
+        public async Task<TodoItem> GetById(int id)
         {
-            var todo = _todoRepository.GetById(id);
+            var todo = await _todoRepository.GetById(id).ConfigureAwait(false);
             if (todo == null)
             {
                 throw new KeyNotFoundException();
