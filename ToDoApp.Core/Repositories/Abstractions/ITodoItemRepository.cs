@@ -16,7 +16,7 @@ namespace ToDoApp.Core.Repositories.Abstractions
         /// Get the <see cref="TodoItem">TodoItem</see> instance with the specified Id.
         /// </summary>
         /// <param name="id">The Id of the <see cref="TodoItem">TodoItem</see> instance to get.</param>
-        Task<TodoItem> GetById(int id);
+        Task<TodoItem?> GetById(int id);
 
         /// <summary>
         /// Delete the <see cref="TodoItem">TodoItem</see> instance with the specified Id.

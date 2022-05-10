@@ -13,12 +13,12 @@ namespace ToDoApp.Tests
     public class TodoItemServiceTests
     {
         private readonly Mock<ITodoItemRepository> _todoRepositoryMock;
-        private Dictionary<int, TodoItem?> _todos;
+        private Dictionary<int, TodoItem> _todos;
 
         public TodoItemServiceTests()
         {
             _todoRepositoryMock = new Mock<ITodoItemRepository>();
-            _todos = new Dictionary<int, TodoItem?>();
+            _todos = new Dictionary<int, TodoItem>();
             SetupRepositoryMock();
         }
         
@@ -287,7 +287,7 @@ namespace ToDoApp.Tests
 
             // Assert
             _todoRepositoryMock.Verify(r => r.UpdateRange(It.IsAny<IEnumerable<TodoItem>>()), Times.Once());
-            Assert.Equal(2, _todos.Values.ToList().Where(x => x.IsCompleted).Count());
+            Assert.Equal(2, _todos.Values.ToList().Where(t => t.IsCompleted).Count());
 
         }
 

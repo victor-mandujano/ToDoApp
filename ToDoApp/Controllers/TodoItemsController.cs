@@ -23,7 +23,7 @@ namespace ToDoApp.Controllers
         }
 
         /// <summary>
-        /// Gets all Todo items
+        /// Gets all Todo items.
         /// </summary>
         /// <returns></returns>
         /// <response code="200">List of Todo items found.</response>
@@ -46,10 +46,10 @@ namespace ToDoApp.Controllers
         }
 
         /// <summary>
-        /// Gets all completed Todo items
+        /// Gets all Todo items with the specified completion status.
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">List of completed Todo items found.</response>
+        /// <response code="200">List of Todo items found with the specified completion status.</response>
         [HttpGet]
         [ActionName("complete")]
         [Route("api/[controller]/[action]/{isCompleted}")]
@@ -71,7 +71,7 @@ namespace ToDoApp.Controllers
 
 
         /// <summary>
-        /// Gets a specific Todo item by ID.
+        /// Gets an existing Todo item with the specified ID.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -103,7 +103,7 @@ namespace ToDoApp.Controllers
         /// <summary>
         /// Creates a new Todo item.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="todoDto"></param>
         /// <response code="201">Todo item successfully created.</response>
         [HttpPost]
         [Route("api/[controller]")]
@@ -126,7 +126,7 @@ namespace ToDoApp.Controllers
         /// Updates an existing Todo item.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="value"></param>
+        /// <param name="todoDto"></param>
         /// <response code="204">Todo item successfully updated.</response>
         /// <response code="404">Todo item not found.</response>
         [HttpPut]
@@ -182,8 +182,7 @@ namespace ToDoApp.Controllers
         /// <summary>
         /// Deletes all Todo items.
         /// </summary>
-        /// <param name="id"></param>
-        /// <response code="204">Todo item successfully deleted.</response>
+        /// <response code="204">Todo items successfully deleted.</response>
         [HttpDelete]
         [Route("api/[controller]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -202,9 +201,10 @@ namespace ToDoApp.Controllers
         }
 
         /// <summary>
-        /// Completes the given Todo item
+        /// Updates the completion status for an existing Todo item.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="isCompleted"></param>
         /// <response code="204">Todo item successfully updated.</response>
         /// <response code="404">Todo item not found.</response>
         [HttpPatch]
@@ -231,9 +231,9 @@ namespace ToDoApp.Controllers
         }
 
         /// <summary>
-        /// Completes all Todo items
+        /// Updates the completion status for all existing Todo items.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="isCompleted"></param>
         /// <response code="204">Todo items successfully updated.</response>
         [HttpPatch]
         [ActionName("complete")]

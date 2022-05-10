@@ -34,9 +34,9 @@ namespace ToDoApp.Core.Repositories
             return Task.FromResult(_todosMap.Values as IEnumerable<TodoItem>);
         }
 
-        public Task<TodoItem> GetById(int id)
+        public Task<TodoItem?> GetById(int id)
         {
-            return Task.FromResult(_todosMap[id]);
+            return Task.FromResult(_todosMap.TryGetValue(id, out var todo) ? todo : default);
         }
 
         public Task<TodoItem> Update(TodoItem todoItem)
