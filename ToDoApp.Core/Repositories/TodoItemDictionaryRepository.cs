@@ -4,7 +4,7 @@ using ToDoApp.Core.Repositories.Abstractions;
 
 namespace ToDoApp.Core.Repositories
 {
-    public class TodoItemInMemoryRepository : ITodoItemRepository
+    public class TodoItemDictionaryRepository : ITodoItemRepository
     {
         private static int _lastId = 0;
         private static readonly ConcurrentDictionary<int, TodoItem> _todosMap = new ConcurrentDictionary<int, TodoItem>();

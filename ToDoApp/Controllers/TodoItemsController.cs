@@ -209,10 +209,10 @@ namespace ToDoApp.Controllers
         /// <response code="404">Todo item not found.</response>
         [HttpPatch]
         [ActionName("complete")]
-        [Route("api/[controller]/{id}/complete")]
+        [Route("api/[controller]/{id}/[action]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateCompletion(int id, bool isCompleted)
+        public async Task<ActionResult> UpdateCompletion(int id, [FromQuery] bool isCompleted)
         {
             try
             {
@@ -237,9 +237,9 @@ namespace ToDoApp.Controllers
         /// <response code="204">Todo items successfully updated.</response>
         [HttpPatch]
         [ActionName("complete")]
-        [Route("api/[controller]/complete")]
+        [Route("api/[controller]/[action]")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateCompletionAll(bool isCompleted)
+        public async Task<ActionResult> UpdateCompletionAll([FromQuery] bool isCompleted)
         {
             try
             {

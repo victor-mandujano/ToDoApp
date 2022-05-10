@@ -1,10 +1,14 @@
 using Microsoft.OpenApi.Models;
 using ToDoApp.Extensions;
 
+// Pass 'useEFInMemory' as a command line argument to use Entity Framework Core InMemory database.
+// Otherwise, a Dictionary store will be used.
+var useEFInMemory = args.Contains("useEFInMemory");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.RegisterRepositories();
+builder.Services.RegisterRepositories(useEFInMemory);
 builder.Services.RegisterServices();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

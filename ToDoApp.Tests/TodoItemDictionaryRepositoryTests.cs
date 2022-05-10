@@ -7,13 +7,13 @@ using Xunit;
 
 namespace ToDoApp.Tests
 {
-    public class TodoItemInMemoryRepositoryTests
+    public class TodoItemDictionaryRepositoryTests
     {
         private readonly ITodoItemRepository _todoRepository;
 
-        public TodoItemInMemoryRepositoryTests()
+        public TodoItemDictionaryRepositoryTests()
         {
-            _todoRepository = new TodoItemInMemoryRepository();
+            _todoRepository = new TodoItemDictionaryRepository();
         }
 
         [Fact]
