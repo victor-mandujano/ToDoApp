@@ -19,7 +19,7 @@ namespace ToDoApp.Core.Repositories
             todoItem.Id = GenerateId();
             todoItem.CreatedDate = DateTime.Now;
             _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return todoItem;
         }
 
@@ -29,7 +29,7 @@ namespace ToDoApp.Core.Repositories
             {
                 _context.TodoItems.Remove(todo);
             }
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task DeleteById(int id)
@@ -40,7 +40,7 @@ namespace ToDoApp.Core.Repositories
                 throw new KeyNotFoundException();
             }
             _context.TodoItems.Remove(todo);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public Task<IEnumerable<TodoItem>> GetAll()
@@ -50,7 +50,7 @@ namespace ToDoApp.Core.Repositories
 
         public async Task<TodoItem?> GetById(int id)
         {
-            return await _context.TodoItems.FindAsync(id);
+            return await _context.TodoItems.FindAsync(id).ConfigureAwait(false);
         }
 
         public async Task<TodoItem> Update(TodoItem todoItem)
@@ -61,7 +61,7 @@ namespace ToDoApp.Core.Repositories
                 throw new KeyNotFoundException();
             }
             _context.Entry(existingTodo).CurrentValues.SetValues(todoItem);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return todoItem;
         }
 

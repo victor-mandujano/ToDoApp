@@ -8,7 +8,7 @@ using ToDoApp.Core.Repositories.Abstractions;
 using ToDoApp.Core.Services;
 using Xunit;
 
-namespace ToDoApp.Tests
+namespace ToDoApp.Tests.Services
 {
     public class TodoItemServiceTests
     {

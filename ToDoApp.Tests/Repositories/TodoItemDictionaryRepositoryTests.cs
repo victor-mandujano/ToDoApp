@@ -5,8 +5,9 @@ using ToDoApp.Core.Repositories;
 using ToDoApp.Core.Repositories.Abstractions;
 using Xunit;
 
-namespace ToDoApp.Tests
+namespace ToDoApp.Tests.Repositories
 {
+    // TODO: Add more unit tests for this repository.
     public class TodoItemDictionaryRepositoryTests
     {
         private readonly ITodoItemRepository _todoRepository;
@@ -34,6 +35,7 @@ namespace ToDoApp.Tests
             Assert.NotEqual(DateTime.MinValue, addedTodo.CreatedDate);
             Assert.Equal("First Todo Item", addedTodo.Title);
             Assert.True(addedTodo.IsCompleted);
+            Assert.Single<TodoItem>(await _todoRepository.GetAll());
         }
     }
 }
